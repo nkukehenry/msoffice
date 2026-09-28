@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<!--
+  Copyright 2026 bittuhere
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Office</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='4' width='11' height='11' fill='%23f25022'/><rect x='17' y='4' width='11' height='11' fill='%237fba00'/><rect x='4' y='17' width='11' height='11' fill='%2300a4ef'/><rect x='17' y='17' width='11' height='11' fill='%23ffb900'/></svg>">
+<style>
+  :root {
+    --bg: #F5F3F1; --card: #FFFFFF; --text: #252423; --dim: #6E6E6E; --line: #E4E1DE;
+    --bar: #FFFFFF; --hover: #F0EDEA; --shadow: 0 1.6px 3.6px rgba(0,0,0,.08), 0 .3px .9px rgba(0,0,0,.06);
+    --accent: #0F6CBD;
+  }
+  body.dark {
+    --bg: #1B1D1F; --card: #26282B; --text: #E8E8E8; --dim: #A0A3A6; --line: #3A3D41;
+    --bar: #201F24; --hover: #31343A; --shadow: 0 1.6px 3.6px rgba(0,0,0,.5);
+    --accent: #4C9BE0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ---------- top bar ---------- */
+  #topbar { height: 48px; background: var(--bar); border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 18px; gap: 14px; position: sticky; top: 0; z-index: 20; }
+  #launcher { width: 30px; height: 30px; display: grid; grid-template-columns: repeat(3, 5px); gap: 2px; align-content: center; justify-content: center; background: none; border: none; border-radius: 4px; }
+  #launcher i { width: 5px; height: 5px; border-radius: 50%; background: var(--dim); }
+  #launcher:hover { background: var(--hover); }
+  #wordmark { font-size: 15px; font-weight: 700; letter-spacing: .2px; }
+  #search { flex: 0 1 420px; margin: 0 auto; height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; color: var(--dim); }
+  #search input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 13px; }
+  #userchip { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  #avatar { width: 28px; height: 28px; border-radius: 50%; background: #0F6CBD; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+  #themeBtn { width: 34px; height: 30px; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 4px; font-size: 15px; }
+  #themeBtn:hover { background: var(--hover); }
+
+  #wrap { max-width: 1180px; margin: 0 auto; padding: 34px 28px 80px; }
+  h1 { font-size: 21px; font-weight: 600; margin-bottom: 4px; }
+  .sub { color: var(--dim); font-size: 13px; margin-bottom: 26px; }
+
+  /* ---------- app tiles ---------- */
+  #tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 16px; margin-bottom: 44px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 20px 16px 15px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; text-decoration: none; color: var(--text); transition: transform .12s, box-shadow .12s; position: relative; }
+  .tile:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.14); }
+  .tile .glyph { width: 46px; height: 46px; }
+  .tile .name { font-size: 14px; font-weight: 600; }
+  .tile .tag { font-size: 11px; color: var(--dim); line-height: 1.35; }
+
+  /* ---------- recents ---------- */
+  #rec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px; }
+  #rec-head h2 { font-size: 16px; font-weight: 600; }
+  #rec-head .hint { font-size: 12px; color: var(--dim); }
+  #docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 14px; }
+  .doc { background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 14px 14px 12px; display: flex; gap: 12px; align-items: flex-start; text-decoration: none; color: var(--text); }
+  .doc:hover { background: var(--hover); }
+  .doc .dglyph { width: 30px; height: 30px; flex: none; }
+  .doc .dname { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 190px; }
+  .doc .dmeta { font-size: 11.5px; color: var(--dim); margin-top: 3px; }
+  #empty { color: var(--dim); font-size: 13px; padding: 28px 6px; border: 1.5px dashed var(--line); border-radius: 8px; text-align: center; grid-column: 1 / -1; }
+  #foot { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--dim); font-size: 12px; display: flex; gap: 18px; flex-wrap: wrap; }
+  #foot b { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="topbar">
+  <button id="launcher" title="Apps"> <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i> </button>
+  <span id="wordmark">Office</span>
+  <div id="search"><svg width="14" height="14" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.6"/></svg><input id="q" placeholder="Search apps and documents"></div>
+  <div id="userchip">
+    <button id="themeBtn" title="Toggle dark / light">☾</button>
+    <span id="username">User</span><span id="avatar">U</span>
+  </div>
+</div>
+
+<div id="wrap">
+  <h1>Good day</h1>
+  <div class="sub">Your apps and documents — stored locally in this browser via IndexedDB.</div>
+
+  <div id="tiles"></div>
+
+  <div id="rec-head"><h2>Recent</h2><span class="hint" id="rec-hint"></span></div>
+  <div id="docs"></div>
+
+  <div id="foot">
+    <span><b>Office Web Edition</b> (clone)</span>
+    <span>Excel · OneNote · Word · PowerPoint</span>
+    <span style="margin-left:auto">Dark mode syncs across all apps · <span id="engine-note"></span></span>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------ apps */
+const APPS = [
+  { id: 'excel', name: 'Excel', tag: 'Spreadsheets with a real formula engine, charts and .xlsx files', href: './excel/index.html', color: '#217346',
+    glyph: `<svg class="glyph" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="6" fill="#217346"/><path d="M16 15h4.2l3.8 8.6 3.8-8.6H32l-6 10 6 11h-4.2l-3.8-7.8L20.2 36H16l6-9.5z" fill="#fff"/></svg>` },
+  { id: 'onenote', name: 'OneNote', tag: 'Freeform notebooks: text, ink, tags, tables, media', href: './onenote/index.html', color: '#7719AA',
+    glyph: `<svg class="glyph" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="6" fill="#7719AA"/><path d="M14 15h4l8 12.5V15h4v18h-4L18 20.5V33h-4z" fill="#fff"/></svg>` },
+  { id: 'word', name: 'Word', tag: 'Print-layout documents: styles, headers, footnotes, .docx', href: './word/index.html', color: '#185ABD',
+    glyph: `<svg class="glyph" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="6" fill="#185ABD"/><path d="M14 15h4.4l2.1 12 2.6-8.4h3.8l2.6 8.4 2.1-12H36l-3.6 18h-4l-2.4-8-2.4 8h-4z" fill="#fff"/></svg>` },
+  { id: 'powerpoint', name: 'PowerPoint', tag: 'Slide decks with designer, transitions and .pptx', href: './powerpoint/index.html', color: '#C43E1C',
+    glyph: `<svg class="glyph" viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="6" fill="#C43E1C"/><path d="M15 14h11a8 8 0 0 1 0 16h-4v6h-7V14zm7 7v5h3.5a2.5 2.5 0 0 0 0-5H22z" fill="#fff"/></svg>` },
+];
+
+const tiles = document.getElementById('tiles');
+for (const a of APPS) {
+  const t = document.createElement(a.href ? 'a' : 'div');
+  t.className = 'tile';
+  if (a.href) t.href = a.href;
+  t.dataset.name = a.name.toLowerCase();
+  t.innerHTML = `${a.glyph}<span class="name">${a.name}</span><span class="tag">${a.tag}</span>`;
+  tiles.appendChild(t);
+}
+
+/* -------------------------------------------------- IndexedDB access */
+function idbGetAll(dbName) {
+  return new Promise(resolve => {
+    if (!('indexedDB' in window)) return resolve(null);
+    const req = indexedDB.open(dbName, 1);
+    req.onupgradeneeded = e => { try { e.target.result.createObjectStore('kv'); } catch (_) { } };
+    req.onerror = () => resolve(null);
+    req.onsuccess = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains('kv')) { db.close(); return resolve(null); }
+      const tx = db.transaction('kv', 'readonly');
+      const vals = tx.objectStore('kv').getAll();
+      const keys = tx.objectStore('kv').getAllKeys();
+      tx.oncomplete = () => { const m = new Map(); (keys.result || []).forEach((k, i) => m.set(k, vals.result[i])); db.close(); resolve(m); };
+      tx.onerror = () => { db.close(); resolve(null); };
+    };
+    req.onblocked = () => resolve(null);
+  });
+}
+function idbPut(dbName, key, val) {
+  return new Promise(resolve => {
+    const req = indexedDB.open(dbName, 1);
+    req.onupgradeneeded = e => { e.target.result.createObjectStore('kv'); };
+    req.onerror = () => resolve(false);
+    req.onsuccess = () => {
+      const db = req.result;
+      const tx = db.transaction('kv', 'readwrite');
+      tx.objectStore('kv').put(val, key);
+      tx.oncomplete = () => { db.close(); resolve(true); };
+      tx.onerror = () => { db.close(); resolve(false); };
+    };
+  });
+}
+
+/* -------------------------------------------------- recent documents */
+const APPMETA = {
+  excel: { name: 'Excel', href: './excel/index.html', color: '#217346', letter: 'X' },
+  onenote: { name: 'OneNote', href: './onenote/index.html', color: '#7719AA', letter: 'N' },
+  word: { name: 'Word', href: './word/index.html', color: '#185ABD', letter: 'W' },
+  powerpoint: { name: 'PowerPoint', href: './powerpoint/index.html', color: '#C43E1C', letter: 'P' },
+};
+function docGlyph(color, letter) {
+  return `<svg class="dglyph" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="5" fill="${color}"/><text x="16" y="21.5" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Segoe UI, sans-serif">${letter}</text></svg>`;
+}
+function relTime(ts) {
+  if (!ts) return '';
+  const s = Math.max(0, (Date.now() - ts) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (s < 86400) return Math.floor(s / 3600) + ' h ago';
+  return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+async function loadRecents() {
+  const docs = [];
+  const [xl, oc, wd, pp] = await Promise.all([idbGetAll('excel-web-edition'), idbGetAll('onenote-web-edition'), idbGetAll('word-web-edition'), idbGetAll('ppt-web-edition')]);
+  if (xl) {
+    try { const lib = JSON.parse(xl.get('xc.docs') || '{}');
+      for (const [name, d] of Object.entries(lib)) docs.push({ app: 'excel', name, modified: d.modified || 0, size: d.size });
+    } catch (_) { }
+  }
+  if (oc) {
+    try { const lib = JSON.parse(oc.get('oc.lib') || '{}');
+      for (const [name, d] of Object.entries(lib)) docs.push({ app: 'onenote', name, modified: d.modified || d.created || 0, size: d.json ? d.json.length : 0 });
+    } catch (_) { }
+  }
+  if (wd) {
+    try { const lib = JSON.parse(wd.get('wc.docs') || '{}');
+      for (const [id, d] of Object.entries(lib)) docs.push({ app: 'word', name: d.name || id, modified: d.savedAt || 0, size: d.html ? d.html.length : 0 });
+    } catch (_) { }
+  }
+  if (pp) {
+    try { const lib = JSON.parse(pp.get('pc.docs') || '{}');
+      for (const [name, d] of Object.entries(lib)) docs.push({ app: 'powerpoint', name, modified: d.modified || 0, size: d.size || (d.json ? d.json.length : 0) });
+    } catch (_) { }
+  }
+  docs.sort((a, b) => b.modified - a.modified);
+  const box = document.getElementById('docs');
+  document.getElementById('rec-hint').textContent = docs.length ? docs.length + ' document' + (docs.length > 1 ? 's' : '') + ' in this browser' : '';
+  if (!docs.length) {
+    box.innerHTML = '<div id="empty">No documents yet. Create something in <b>Excel</b>, <b>Word</b>, <b>PowerPoint</b> or <b>OneNote</b> — saved documents show up here automatically.</div>';
+    return;
+  }
+  for (const d of docs.slice(0, 24)) {
+    const m = APPMETA[d.app];
+    const a = document.createElement('a');
+    a.className = 'doc'; a.href = m.href;
+    a.dataset.name = (d.name + ' ' + m.name).toLowerCase();
+    a.innerHTML = `${docGlyph(m.color, m.letter)}<span><span class="dname">${d.name.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))}${({ excel: '.xlsx', word: '.docx', powerpoint: '.pptx' })[d.app] || ''}</span><div class="dmeta">${m.name} · ${relTime(d.modified)}${d.size ? ' · ' + (d.size / 1024).toFixed(1) + ' KB' : ''}</div></span>`;
+    box.appendChild(a);
+  }
+}
+
+/* -------------------------------------------------- theme (syncs all DBs) */
+async function applyTheme(dark, persist) {
+  document.body.classList.toggle('dark', dark);
+  document.getElementById('themeBtn').textContent = dark ? '☀' : '☾';
+  if (!persist) return;
+  await Promise.all([
+    idbPut('office-dashboard', 'theme', dark ? 'dark' : 'light'),
+    idbPut('excel-web-edition', 'xc.theme', dark ? 'dark' : 'light'),
+    idbPut('onenote-web-edition', 'oc.theme', dark ? 'dark' : 'light'),
+    idbPut('word-web-edition', 'wc.theme', dark ? 'dark' : 'light'),
+    idbPut('ppt-web-edition', 'pc.theme', dark ? 'dark' : 'light'),
+  ]);
+}
+document.getElementById('themeBtn').addEventListener('click', () => applyTheme(!document.body.classList.contains('dark'), true));
+(async () => {
+  const own = await idbGetAll('office-dashboard');
+  let pref = own && own.get('theme');
+  if (!pref) { const xl = await idbGetAll('excel-web-edition'); pref = xl && xl.get('xc.theme'); }
+  if (!pref && matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) pref = 'dark';
+  applyTheme(pref === 'dark', false);
+})();
+
+/* -------------------------------------------------- search */
+document.getElementById('q').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  for (const t of document.querySelectorAll('.tile, .doc'))
+    t.style.display = !q || t.dataset.name.includes(q) ? '' : 'none';
+});
+
+document.getElementById('engine-note').textContent = 'storage: IndexedDB';
+loadRecents();
+</script>
+</body>
+</html>

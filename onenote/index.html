@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<!--
+  Copyright 2026 bittuhere
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Quick Notes - OneNote</title>
+<link rel="stylesheet" href="note.css"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%237719AA'/%3E%3Ctext x='16' y='23' font-family='Segoe UI' font-weight='600' font-size='19' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E"/>
+</head>
+<body class="app">
+<!-- ======================= title bar ======================= -->
+<div id="titlebar">
+  <span id="tb-icon" title="OneNote"></span>
+  <div id="qat"></div>
+  <div id="doc-title"><span id="doc-name">Quick Notes</span> - OneNote</div>
+  <div id="tb-right">
+    <span id="tb-user" title="User"></span>
+    <span id="tb-ribbon-toggle" title="Collapse the Ribbon (Ctrl+F1)"></span>
+    <span class="win-btn" id="win-min" title="Minimize"></span>
+    <span class="win-btn" id="win-max" title="Maximize"></span>
+    <span class="win-btn" id="win-close" title="Close"></span>
+  </div>
+</div>
+<!-- ======================= tab row + tell me ======================= -->
+<div id="tabrow">
+  <div id="tabs"></div>
+  <div id="tellme-wrap">
+    <input id="tellme" placeholder="Tell me what you want to do" spellcheck="false"/>
+    <span id="tellme-ico"></span>
+    <div id="tellme-pop" hidden></div>
+  </div>
+</div>
+<!-- ======================= ribbon ======================= -->
+<div id="ribbon"></div>
+
+<!-- ======================= content region ======================= -->
+<div id="workrow">
+  <!-- collapsible navigation pane (notebooks + sections) -->
+  <div id="navpane" hidden>
+    <div id="nav-head">
+      <span id="nav-search-wrap"><input id="nav-search" placeholder="Search all notebooks (Ctrl+E)" spellcheck="false"/></span>
+    </div>
+    <div id="nav-scroll"></div>
+    <div id="nav-addnb" title="Add Notebook"><span id="nav-addnb-ico"></span>Add Notebook</div>
+  </div>
+
+  <div id="maincol">
+    <!-- notebook + section tab strip -->
+    <div id="secstrip">
+      <div id="nb-cover" title="Show Navigation (Alt+N)">
+        <span id="nb-dot"></span><span id="nb-name"></span><span id="nb-caret"></span>
+      </div>
+      <div id="sec-tabs"></div>
+      <div id="sec-add" title="New Section (Ctrl+T)"></div>
+    </div>
+    <div id="pagework">
+      <!-- the unbounded white note page -->
+      <div id="cwrap"><div id="page"><div id="tags-layer"></div><div id="cdivs"></div><svg id="ink" xmlns="http://www.w3.org/2000/svg"></svg><div id="csel" hidden></div></div></div>
+      <!-- page tabs (right edge, like OneNote 2016) -->
+      <div id="pagepane">
+        <div id="pg-add"><span id="pg-add-ico"></span>Add Page</div>
+        <div id="pg-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= overlays ======================= -->
+<div id="pop-root"></div>
+<div id="dlg-root"></div>
+<div id="ctx-root"></div>
+<div id="sidepane" hidden></div>
+<div id="search-ovl" hidden></div>
+<div id="lock-ovl" hidden></div>
+
+<script src="idb.js"></script>
+<script src="icons.js"></script>
+<script src="app.js"></script>
+<script src="app2.js"></script>
+<script src="app3.js"></script>
+<script src="app4.js"></script>
+<script src="transcribe.js"></script>
+<script src="boot.js"></script>
+</body>
+</html>
